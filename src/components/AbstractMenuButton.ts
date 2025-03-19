@@ -1,7 +1,7 @@
-import {AiEditorOptions, AiEditorEventListener, InnerEditor} from "../core/AiEditor.ts";
-import {Editor, EditorEvents} from "@tiptap/core";
+import { Editor, EditorEvents } from "@tiptap/core";
+import { AiEditorEventListener, AiEditorOptions, InnerEditor } from "../core/AiEditor.ts";
 // @ts-ignore
-import {ChainedCommands} from "@tiptap/core/dist/packages/core/src/types";
+import { ChainedCommands } from "@tiptap/core/dist/packages/core/src/types";
 
 export class AbstractMenuButton extends HTMLElement implements AiEditorEventListener {
 
@@ -23,7 +23,15 @@ export class AbstractMenuButton extends HTMLElement implements AiEditorEventList
     }
 
     connectedCallback() {
-        this.innerHTML = this.template;
+        // Set the template content
+        if (this.template && this.innerHTML === '') {
+            this.innerHTML = this.template;
+        }
+        
+        // If editor is already available, ensure we're properly initialized
+        if (this.editor && typeof this.onEditableChange === 'function') {
+            this.onEditableChange(!!this.options?.editable);
+        }
     }
 
     // @ts-ignore
